@@ -7,7 +7,8 @@ import SignUp from '../pages/SingUp';
 
 import Dashboard from "../pages/Dashboard";
 import Profile from '../pages/Profile';
-// import Despesas from "../pages/Despesas";
+import Dividendos from "../pages/Dividendos";
+import Ativos from "../pages/Ativos";
 
 
 export default function Routes() {
@@ -18,6 +19,8 @@ export default function Routes() {
             <Route exact path="/dashboard" component={Dashboard} isPrivate />
 
             <Route exact path="/profile" component={Profile} isPrivate />
+            <Route exact path="/dividendos" component={Dividendos} isPrivate />
+            <Route exact path="/ativos" component={Ativos} isPrivate />
                    
         </Switch>
 

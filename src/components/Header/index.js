@@ -4,7 +4,7 @@ import { AuthContext } from '../../contexts/auth';
 import avatar from '../../assets/avatar.png';
 
 import { Link } from "react-router-dom";
-import { FiHome, FiUser, FiSettings } from "react-icons/fi";
+import { FcMoneyTransfer, FcHome, FcSettings, FcCurrencyExchange } from "react-icons/fc";
 
 export default function Header() {
     const { user } = useContext(AuthContext);
@@ -17,15 +17,22 @@ export default function Header() {
             </div>
 
             <Link to="/">
-                <FiHome color='#FFF' size={25} />
+                <FcHome color='#FFF' size={25} />
                 Dashboard
             </Link>
-            <Link to="/despesas">
-                <FiUser color='#FFF' size={25} />
-                Despesas
+
+            <Link to="/ativos">
+                <FcCurrencyExchange size={25} />
+                Ativos
             </Link>
+
+            <Link to="/dividendos">
+                <FcMoneyTransfer size={25} />
+                Dividendos
+            </Link>
+            
             <Link to="/profile">                
-                <FiSettings color='#FFF' size={25} />
+                <FcSettings size={25} />
                 Configurações
             </Link>
         </div>
