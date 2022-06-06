@@ -1,16 +1,20 @@
 import { useState, useEffect, useContext } from 'react';
-import './dividendos.css';
 
 import firebase from "../../services/firebaseConnection";
+import { useParams, useHistory } from 'react-router-dom';
+
 import Header from '../../components/Header';
 import Title from '../../components/Title';
 import { AuthContext } from '../../contexts/auth';
-
-import { FcMoneyTransfer } from "react-icons/fc";
 import { toast } from "react-toastify";
+
+import './dividendos.css';
+import { FcMoneyTransfer } from "react-icons/fc";
 
 export default function Dividendos() {
 
+    const { id } = useParams();
+    const history = useHistory();
     const [loadAtivos, setLoadAtivos] = useState(true);
     const [ativos, setAtivos] = useState([]);
     const [ativoSelected, setAtivoSelected] = useState(0);
@@ -19,6 +23,8 @@ export default function Dividendos() {
     const [valor, setValor] = useState('');
     const [qtd, setQtd] = useState('');
     const [dataPagamento, setDataPagamento] = useState('');
+
+    const [idAtivo, setIdAtivo] = useState(false);
 
     const { user } = useContext(AuthContext);
 
@@ -44,8 +50,14 @@ export default function Dividendos() {
                     return;
                 }
 
+                
                 setAtivos(lista);
                 setLoadAtivos(false);
+                
+                if(id) {
+                    console.log(id);
+                    loadId(lista);
+                }
 
             })
             .catch((error) => {
@@ -56,12 +68,61 @@ export default function Dividendos() {
         }
 
         loadAtivos();
+
     }, [])
 
 
 
+    async function loadId(lista) {
+        await firebase.firestore().collection('dividendos').doc(id)
+        .get()
+        .then((snapshot) => {
+            console.log(snapshot);
+            setQtd(snapshot.data().qtd);
+            setDataPagamento(snapshot.data().dataPagamento);
+            setValor(snapshot.data().valor);
+            setStatus(snapshot.data().status);
+
+            let index = lista.findIndex(item => item.id === snapshot.data().ativoId)
+            setAtivoSelected(index);
+            setIdAtivo(true);
+            
+        })
+        .catch((error) => {
+            console.log('Erro ao passar ID: ', error);
+            setIdAtivo(false);
+        })
+    }
+
+
     async function handleRegister(e) {
-        e.preventDefault();
+        e.preventDefault();   
+        
+        if(idAtivo) {
+            await firebase.firestore().collection('dividendos')
+            .doc(id)
+            .update({
+                ativo: ativos[ativoSelected].ativo,
+                ativoId: ativos[ativoSelected].id,
+                status: status,            
+                valor: valor,
+                qtd: qtd,
+                dataPagamento: dataPagamento,
+                userId: user.uid
+            })
+            .then(() => {
+                toast.success('Dividendo atualizado com sucesso!');
+                setAtivoSelected(0);
+                history.push('/dashboard');
+            })
+            .catch((error) => {
+                toast.error('Ops erro a registrar, tente mais tarde');
+                console.log(error);
+            })
+
+            return;
+        }
+        
 
         await firebase.firestore().collection('dividendos')
         .add({
@@ -73,7 +134,7 @@ export default function Dividendos() {
             qtd: qtd,
             dataPagamento: dataPagamento,
             userId: user.uid
-        })
+        })        
         .then(() => {
             toast.success('Chamado criado com sucesso!');
             setQtd('');
@@ -163,7 +224,11 @@ export default function Dividendos() {
                             <span>Negado</span>
                         </div>
 
-                        <button type="submit">Lançar</button>
+                        {idAtivo ? (
+                            <button type="submit">Atualizar</button>    
+                        ) : (
+                            <button type="submit">Lançar</button>                            
+                        )}
                     </form>
 
                 </div>

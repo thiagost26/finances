@@ -18,10 +18,11 @@ export default function Routes() {
             <Route exact path="/register" component={SignUp} /> 
             <Route exact path="/dashboard" component={Dashboard} isPrivate />
 
-            <Route exact path="/profile" component={Profile} isPrivate />
             <Route exact path="/dividendos" component={Dividendos} isPrivate />
+            <Route exact path="/dividendos/:id" component={Dividendos}  isPrivate />
+            <Route exact path="/profile" component={Profile} isPrivate />
             <Route exact path="/ativos" component={Ativos} isPrivate />
-                   
+
         </Switch>
 
     )
