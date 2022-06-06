@@ -28,28 +28,29 @@ export default function Dashboard() {
 
     useEffect(() => {
         
-        
-        async function loadChamados() {
-            await listRef.limit(5)
-            .get()
-            .then((snapshot) => {
-                updateState(snapshot)
-    
-            })
-            .catch((error) => {
-                console.log('Deu algum erro: ', error);
-                setLoadingMore(false);
-            })
-    
-            setLoading(false);
-        }
-        
         return () => {
-            loadChamados();
 
+            loadChamados();
         }
+
         
     }, []);
+
+
+    async function loadChamados() {
+        await listRef.limit(5)
+        .get()
+        .then((snapshot) => {
+            updateState(snapshot)
+
+        })
+        .catch((error) => {
+            console.log('Deu algum erro: ', error);
+            setLoadingMore(false);
+        })
+
+        setLoading(false);
+    }
 
 
 
