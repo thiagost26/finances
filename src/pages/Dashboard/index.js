@@ -104,26 +104,21 @@ export default function Dashboard() {
     }
 
 
-    // if(loading) {
+    if(!loading) {
         return(
-            <div>
+            <>
                 <Header />
                 <div className="content">
                     <Title name="Dividendos lançados">
                         <FcMoneyTransfer size={25} />
                     </Title>
 
-                    {dividendos.length === 0 ? (
-                        <div className="container dashboard">
-                            <span>Nenhum dividendo registrado...</span>
 
-                            <Link to="/dividendos" className="dividendos">
-                                <FcPlus size={25} color="#FFF" />
-                                Novo dividendo
-                            </Link>
-                        </div>                    
+                        <Link to="/dividendos" className="dividendos">
+                            <FcPlus size={25} color="#FFF" />
+                            Novo dividendo
+                        </Link>
 
-                    ) : (
                         <>
                             <table>
                                 <thead>
@@ -173,7 +168,6 @@ export default function Dashboard() {
                             {loadingMore && <h3 style={{textAlign: 'center', marginTop: 15}}>Buscando dados...</h3>}
                             { !loadingMore && !isEmpty && <button className="btn-more" onClick={handleMore}>Buscar mais</button>}
                         </>
-                    )}
                 </div>
 
                 {showPostModal && (
@@ -182,8 +176,8 @@ export default function Dashboard() {
                         close={togglePostModal}
                     />
                 )}
-            </div>
+            </>
         )
-    // }
+    }
 
 }
